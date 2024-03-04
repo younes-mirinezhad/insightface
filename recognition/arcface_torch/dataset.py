@@ -132,7 +132,44 @@ class DataLoaderX(DataLoader):
             raise StopIteration
         self.preload()
         return batch
+    
 
+from PIL import Image
+from io import BytesIO
+class AddGaussianNoise(object):
+    def __init__(self, min_value=-5.0, max_value=5.0):
+        self.min_value = min_value
+        self.max_value = max_value
+
+    def __call__(self, tensor):
+        noise = torch.randn_like(tensor)
+        scaled_noise = noise * (self.max_value - self.min_value) + self.min_value
+        #convert tensor to between 0 and 255
+        tensor = tensor * 255
+        print(tensor)
+        noisy_tensor = torch.clamp(tensor + scaled_noise, 0, 255)
+        return noisy_tensor / 255
+class ResizeTransform(object):
+    def __init__(self, scale = 3):
+        self.scale = scale
+
+    def __call__(self, image):
+        width, height = image.size
+        width_new = int(width / self.scale)
+        height_new = int(height / self.scale)
+        resized_image = image.resize((width_new, height_new))
+        image_new = resized_image.resize((width, height))
+        return image_new
+class CompressionTransform(object):
+    def __init__(self, quality=30):
+        self.quality = quality
+
+    def __call__(self, image):
+        compressed_image_buffer = BytesIO()
+        image.save(compressed_image_buffer, format="JPEG", quality=self.quality)
+        compressed_image_buffer.seek(0)
+        compressed_image = Image.open(compressed_image_buffer)
+        return compressed_image
 
 class MXFaceDataset(Dataset):
     def __init__(self, root_dir, local_rank):
@@ -140,7 +177,16 @@ class MXFaceDataset(Dataset):
         self.transform = transforms.Compose(
             [transforms.ToPILImage(),
              transforms.RandomHorizontalFlip(),
+
+             #******************************************************
+             transforms.RandomRotation(degrees=10), # Rotation
+            #  transforms.RandomApply([transforms.GaussianBlur(kernel_size=13, sigma=(2, 2))], p=0.5), # Gaussian blur
+             transforms.RandomApply([ResizeTransform(3)], p=0.5), # Resize
+             transforms.RandomApply([CompressionTransform(25)], p=0.5), # Compression
+             #******************************************************
+
              transforms.ToTensor(),
+            #  transforms.RandomApply([AddGaussianNoise(-7, 7)], p=1),  # Gaussian noise
              transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
              ])
         self.root_dir = root_dir

@@ -39,10 +39,12 @@ except KeyError:
     )
 
 
-def main(args):
+# def main(args):
+def main():
 
     # get config
-    cfg = get_config(args.config)
+    # cfg = get_config(args.config)
+    cfg = get_config("configs/ms1mv2_r50.py")
     # global control random seed
     setup_seed(seed=cfg.seed, cuda_deterministic=False)
 
@@ -254,4 +256,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Distributed Arcface Training in Pytorch")
     parser.add_argument("config", type=str, help="py config file")
-    main(parser.parse_args())
+    # main(parser.parse_args())
+    main()
