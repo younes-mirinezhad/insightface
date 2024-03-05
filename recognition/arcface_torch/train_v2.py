@@ -39,12 +39,12 @@ except KeyError:
     )
 
 
-# def main(args):
-def main():
+# def main():
+#     cfg = get_config("configs/ms1mv3_r50.py")
 
-    # get config
-    # cfg = get_config(args.config)
-    cfg = get_config("configs/ms1mv2_r50.py")
+def main(args):
+    cfg = get_config(args.config)
+
     # global control random seed
     setup_seed(seed=cfg.seed, cuda_deterministic=False)
 
@@ -156,6 +156,20 @@ def main():
         lr_scheduler.load_state_dict(dict_checkpoint["state_lr_scheduler"])
         del dict_checkpoint
 
+# ******************************************************************
+    if cfg.finetune:
+        start_epoch = 0
+        global_step = 0
+        backbone.module.load_state_dict(torch.load(cfg.pretrained))
+        
+        module_partial_fc = PartialFC_V2(
+            margin_loss, cfg.embedding_size, cfg.num_classes, cfg.sample_rate, False)
+        
+        module_partial_fc.train().cuda()
+        opt.load_state_dict(opt.state_dict())
+        lr_scheduler.load_state_dict(lr_scheduler.state_dict())
+# ******************************************************************
+
     for key, value in cfg.items():
         num_space = 25 - len(key)
         logging.info(": " + key + " " * num_space + str(value))
@@ -227,7 +241,7 @@ def main():
             torch.save(checkpoint, os.path.join(cfg.output, f"checkpoint_gpu_{rank}.pt"))
 
         if rank == 0:
-            path_module = os.path.join(cfg.output, "model.pt")
+            path_module = os.path.join(cfg.output, f"model_{epoch}.pt")
             torch.save(backbone.module.state_dict(), path_module)
 
             if wandb_logger and cfg.save_artifacts:
@@ -256,5 +270,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Distributed Arcface Training in Pytorch")
     parser.add_argument("config", type=str, help="py config file")
-    # main(parser.parse_args())
-    main()
+
+    main(parser.parse_args())
+    # main()

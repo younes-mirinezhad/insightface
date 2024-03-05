@@ -19,9 +19,24 @@ config.lr = 0.1
 config.verbose = 2000
 config.dali = False
 
-config.rec = "/home/chiko/Documents/faces_emore/"
+# Full dataset
+config.rec = "/train_tmp/ms1m-retinaface-t1"
 config.num_classes = 93431
 config.num_image = 5179510
 config.num_epoch = 20
 config.warmup_epoch = 0
 config.val_targets = ['lfw', 'cfp_fp', "agedb_30"]
+
+# Test dataset
+# config.rec = "/home/chiko/Documents/faces_emore_Test/"
+# config.num_classes = 500
+# config.num_image = 34225
+# config.num_epoch = 20
+# config.warmup_epoch = 0
+# config.val_targets = ['lfw']
+
+# Finetune
+# config.finetune = True
+# config.pretrained = '/home/chiko/Documents/Model/backbone.pth'
+
+# config.save_all_states = True

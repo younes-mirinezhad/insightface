@@ -19,10 +19,9 @@ config.lr = 0.1
 config.verbose = 2000
 config.dali = False
 
-config.rec = "/home/chiko/Documents/faces_emore_Test/"
-config.num_classes = 500
-config.num_image = 34225
+config.rec = "/train_tmp/faces_emore"
+config.num_classes = 85742
+config.num_image = 5822653
 config.num_epoch = 20
 config.warmup_epoch = 0
-# config.val_targets = ['lfw', 'cfp_fp', "agedb_30"]
-config.val_targets = ['lfw']
+config.val_targets = ['lfw', 'cfp_fp', "agedb_30"]
