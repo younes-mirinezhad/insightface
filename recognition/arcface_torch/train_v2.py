@@ -38,6 +38,27 @@ except KeyError:
         world_size=world_size,
     )
 
+def freeze_params(model, percentage):
+    total_params = sum(p.numel() for p in model.parameters())
+    freeze_until = int(total_params * percentage / 100)
+    print('*** total_params: ', total_params, ' - freeze_until: ', freeze_until)
+
+    frozen_params = 0
+    for param in model.parameters():
+        if frozen_params >= freeze_until:
+            break
+        param.requires_grad = False
+        frozen_params += param.numel()
+def freeze_layers(model, percentage):
+    total_layers = len(list(model.children()))
+    freeze_until = int(total_layers * percentage / 100)
+    print('*** total_layers: ', total_layers, ' - freeze_until: ', freeze_until)
+
+    for i, child in enumerate(model.children()):
+        if i >= freeze_until:
+            break
+        for param in child.parameters():
+            param.requires_grad = False
 
 # def main():
 #     cfg = get_config("configs/ms1mv3_r50.py")
@@ -160,7 +181,12 @@ def main(args):
     if cfg.finetune:
         start_epoch = 0
         global_step = 0
-        backbone.module.load_state_dict(torch.load(cfg.pretrained))
+
+        model = torch.load(cfg.pretrained)
+        backbone.module.load_state_dict(model)
+
+        # freeze_params(backbone.module, 70)
+        freeze_layers(backbone.module, 70)
         
         module_partial_fc = PartialFC_V2(
             margin_loss, cfg.embedding_size, cfg.num_classes, cfg.sample_rate, False)
