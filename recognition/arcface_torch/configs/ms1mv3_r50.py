@@ -28,7 +28,7 @@ config.warmup_epoch = 0
 config.val_targets = ['lfw', 'cfp_fp', "agedb_30"]
 
 # Test dataset
-# config.rec = "/home/chiko/Documents/faces_emore_Test/"
+# config.rec = "/media/chiko/HDD_1/W/SMS_KeyTech/faces_emore_Test"
 # config.num_classes = 500
 # config.num_image = 34225
 # config.num_epoch = 20
@@ -37,6 +37,7 @@ config.val_targets = ['lfw', 'cfp_fp', "agedb_30"]
 
 # Finetune
 # config.finetune = True
-# config.pretrained = '/home/chiko/Documents/Model/backbone.pth'
+# config.freezing_percentage = 70
+# config.pretrained = '/media/chiko/HDD_1/W/SMS_KeyTech/Model/model_6.pt'
 
 # config.save_all_states = True

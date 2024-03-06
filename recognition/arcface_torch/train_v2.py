@@ -59,6 +59,9 @@ def freeze_layers(model, percentage):
             break
         for param in child.parameters():
             param.requires_grad = False
+def print_layer_names(model):
+    for name, layer in model.named_modules():
+        print('-----> ', name)
 
 # def main():
 #     cfg = get_config("configs/ms1mv3_r50.py")
@@ -185,8 +188,10 @@ def main(args):
         model = torch.load(cfg.pretrained)
         backbone.module.load_state_dict(model)
 
-        # freeze_params(backbone.module, 70)
-        freeze_layers(backbone.module, 70)
+        # print_layer_names(backbone.module)
+
+        # freeze_params(backbone.module, cfg.freezing_percentage)
+        freeze_layers(backbone.module, cfg.freezing_percentage)
         
         module_partial_fc = PartialFC_V2(
             margin_loss, cfg.embedding_size, cfg.num_classes, cfg.sample_rate, False)
