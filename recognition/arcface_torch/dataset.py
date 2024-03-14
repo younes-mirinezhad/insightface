@@ -133,7 +133,7 @@ class DataLoaderX(DataLoader):
         self.preload()
         return batch
     
-
+#******************************************************
 from PIL import Image
 from io import BytesIO
 class AddGaussianNoise(object):
@@ -170,6 +170,7 @@ class CompressionTransform(object):
         compressed_image_buffer.seek(0)
         compressed_image = Image.open(compressed_image_buffer)
         return compressed_image
+#******************************************************
 
 class MXFaceDataset(Dataset):
     def __init__(self, root_dir, local_rank):

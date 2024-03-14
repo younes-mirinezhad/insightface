@@ -295,7 +295,6 @@ def main(args):
             wandb_logger.log_artifact(model)
 
 
-
 if __name__ == "__main__":
     torch.backends.cudnn.benchmark = True
     parser = argparse.ArgumentParser(
