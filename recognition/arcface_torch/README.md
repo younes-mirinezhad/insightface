@@ -25,6 +25,9 @@ Added Classes:
   5. <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/dataset.py#L163">CompressionTransform</a>  
     1. Used in line <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/dataset.py#L185">185</a>
 
+#### Verification error
+In <a href="https://github.com/younes-mirinezhad/insightface/blob/master/recognition/arcface_torch/eval/verification.py">verification </a> I see an error that need to remove duplicate data before set them as input data to scipy
+
 ## Requirements
 
 To avail the latest features of PyTorch, we have upgraded to version 1.12.0.
