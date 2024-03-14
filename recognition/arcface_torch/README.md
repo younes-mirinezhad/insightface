@@ -7,6 +7,24 @@ The "arcface_torch" repository is the official implementation of the ArcFace alg
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/killing-two-birds-with-one-stone-efficient/face-verification-on-agedb-30)](https://paperswithcode.com/sota/face-verification-on-agedb-30?p=killing-two-birds-with-one-stone-efficient)  
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/killing-two-birds-with-one-stone-efficient/face-verification-on-cfp-fp)](https://paperswithcode.com/sota/face-verification-on-cfp-fp?p=killing-two-birds-with-one-stone-efficient)
 
+## Our Changes
+#### Fine-tune of <a href="https://github.com/younes-mirinezhad/insightface/blob/master/recognition/arcface_torch/configs/ms1mv3_r50.py">ms1mv3_r50.py</a> config file
+You can set True fine-tune <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/configs/ms1mv3_r50.py#L39">flag</a> and set pre-trained <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/configs/ms1mv3_r50.py#L41">weight path</a> to fine-tune that. (Used <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/train_v2.py#L184">here</a>)
+
+#### Freeze layers
+You can choose a percentage of layers of your weight to freeze them from the top in fine-tuning <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/configs/ms1mv3_r50.py#L40">(line 40)</a>  
+Also, I added <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/train_v2.py#L41">freeze_params</a> and <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/train_v2.py#L62">print_layer_names</a> functions but didn't use them.
+
+#### Added some augmentation in <a href="https://github.com/younes-mirinezhad/insightface/blob/master/recognition/arcface_torch/dataset.py">dataset.py</a>.  
+You can change their probability of happening or you can deactivate them.  
+Added Classes:
+  1. <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/dataset.py#L139">AddGaussianNoise</a>  
+    1. Not Used  
+  3. <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/dataset.py#L152">ResizeTransform</a>  
+    1. Used in line <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/dataset.py#L184">184</a>  
+  5. <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/dataset.py#L163">CompressionTransform</a>  
+    1. Used in line <a href="https://github.com/younes-mirinezhad/insightface/blob/9a8460dfbd25bb012f1aad2843e88791d313f67e/recognition/arcface_torch/dataset.py#L185">185</a>
+
 ## Requirements
 
 To avail the latest features of PyTorch, we have upgraded to version 1.12.0.
